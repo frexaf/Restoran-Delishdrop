@@ -21,7 +21,7 @@ export const home = {
       label: "Reservasi Meja",
       href: "/reservasi",
     },
-    image: "/images/gourmet-seafood.jpg",
+    image: "/images/hero-image.jpg",
   },
 
   promos: {
