@@ -40,7 +40,7 @@ export function FaqSection() {
                 <button
                   type="button"
                   onClick={() => toggle(index)}
-                  className="flex w-full items-center justify-between p-5 text-left font-bold text-foreground transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:text-base"
+                  className="flex w-full cursor-pointer items-center justify-between p-5 text-left font-bold text-foreground transition-colors hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:text-base"
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${index}`}
                 >

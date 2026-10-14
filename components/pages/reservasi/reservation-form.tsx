@@ -76,13 +76,13 @@ export function ReservationForm() {
             meja Anda.
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-row gap-3">
             <Button
               type="button"
               variant="outline"
               onClick={() => setIsSubmitted(false)}
             >
-              Ubah Data Reservasi
+              Ubah Data
             </Button>
             <a
               href={reservationWhatsappLink({
@@ -104,8 +104,8 @@ export function ReservationForm() {
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
             {/* Nama Lengkap */}
             <Field
               id="res-name"
@@ -235,7 +235,8 @@ export function ReservationForm() {
               className="w-full cursor-pointer justify-center gap-2 text-base font-bold shadow-md"
             >
               <FaWhatsapp className="size-5" />
-              <span>Kirim & Konfirmasi Reservasi via WhatsApp</span>
+              <span className="sm:hidden">Konfirmasi via WhatsApp</span>
+              <span className="hidden sm:inline">Kirim & Konfirmasi Reservasi via WhatsApp</span>
             </Button>
             <p className="mt-3 text-center text-xs text-muted-foreground">
               Konfirmasi meja langsung ditangani oleh staf DelishDrop dalam

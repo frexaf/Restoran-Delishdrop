@@ -2,10 +2,11 @@
 
 import { useState, useMemo, useTransition } from "react";
 import Image from "next/image";
-import { LuSearch, LuStar, LuCheck, LuSlidersHorizontal } from "react-icons/lu";
+import { LuSearch, LuStar, LuCheck, LuSlidersHorizontal, LuTag } from "react-icons/lu";
 import { FaWhatsapp } from "react-icons/fa6";
-import { menuCategories, menuItems } from "@/content/menu";
+import { menuCategories, menuItems, getProductPrice } from "@/content/menu";
 import { Container } from "@/components/ui/container";
+import { Badge } from "@/components/ui/badge";
 import { menuOrderWhatsappLink } from "@/lib/links";
 import { cn } from "@/lib/utils";
 
@@ -130,72 +131,100 @@ export function MenuCatalog({ initialCategory }: MenuCatalogProps) {
           </div>
         ) : (
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredItems.map((item) => (
-              <div
-                key={item.id}
-                className="group flex flex-col justify-between overflow-hidden rounded-3xl border border-border/80 bg-surface-card p-4 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
-              >
-                {/* Photo & Badges */}
-                <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-muted">
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+            {filteredItems.map((item) => {
+              const priceInfo = getProductPrice(item.price, item.promoPercent);
 
-                  {/* Rating */}
-                  <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-xs font-bold text-foreground shadow-sm backdrop-blur-md">
-                    <LuStar className="size-3.5 fill-amber-400 text-amber-500" />
-                    <span>{item.rating.toFixed(1)}</span>
-                  </div>
+              return (
+                <div
+                  key={item.id}
+                  className="group flex flex-col justify-between overflow-hidden rounded-3xl border border-border/80 bg-surface-card p-4 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
+                >
+                  {/* Photo & Badges */}
+                  <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl bg-muted">
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
 
-                  {/* Best seller / badge */}
-                  {item.badge && (
-                    <div className="absolute top-3 left-3 rounded-full bg-primary/90 px-2.5 py-1 text-[10px] font-bold text-primary-foreground shadow-sm backdrop-blur-md">
-                      {item.badge}
+                    {/* Rating */}
+                    <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-xs font-bold text-foreground shadow-sm backdrop-blur-md">
+                      <LuStar className="size-3.5 fill-amber-400 text-amber-500" />
+                      <span>{item.rating.toFixed(1)}</span>
                     </div>
-                  )}
-                </div>
 
-                {/* Content */}
-                <div className="mt-4 flex flex-1 flex-col">
-                  <span className="text-xs font-medium text-muted-foreground">
-                    {item.category}
-                  </span>
-                  <h3 className="mt-1 text-base font-bold text-foreground transition-colors group-hover:text-primary dark:group-hover:text-emerald-400">
-                    {item.name}
-                  </h3>
-                  <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-muted-foreground">
-                    {item.description}
-                  </p>
-                </div>
-
-                {/* Price & Order CTA */}
-                <div className="mt-5 flex items-center justify-between border-t border-border/60 pt-3.5">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] tracking-wider text-muted-foreground uppercase">
-                      Harga
-                    </span>
-                    <span className="text-base font-extrabold text-foreground">
-                      {item.priceFormatted}
-                    </span>
+                    {/* Promo & Status Badges */}
+                    <div className="absolute top-3 left-3 z-10 flex flex-col items-start gap-1.5">
+                      {priceInfo.promoBadge && (
+                        <Badge
+                          variant="accent"
+                          className="gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold shadow-xs sm:px-2.5 sm:text-xs"
+                        >
+                          <LuTag className="size-3 shrink-0" />
+                          <span>{priceInfo.promoBadge}</span>
+                        </Badge>
+                      )}
+                      {item.badge && (
+                        <Badge
+                          variant="primary"
+                          className="rounded-full px-2 py-0.5 text-[10px] font-bold shadow-xs sm:px-2.5 sm:text-xs"
+                        >
+                          <span>{item.badge}</span>
+                        </Badge>
+                      )}
+                    </div>
                   </div>
 
-                  <a
-                    href={menuOrderWhatsappLink(item.name, item.priceFormatted)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-2 text-xs font-bold text-primary-foreground shadow-xs transition-transform hover:scale-105 hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-                    aria-label={`Pesan ${item.name} seharga ${item.priceFormatted} via WhatsApp`}
-                  >
-                    <FaWhatsapp className="size-3.5" />
-                    <span>Pesan via WA</span>
-                  </a>
+                  {/* Content */}
+                  <div className="mt-4 flex flex-1 flex-col">
+                    <span className="text-xs font-medium text-muted-foreground">
+                      {item.category}
+                    </span>
+                    <h3 className="mt-1 text-base font-bold text-foreground transition-colors group-hover:text-primary dark:group-hover:text-emerald-400">
+                      {item.name}
+                    </h3>
+                    <p className="mt-1 line-clamp-3 text-xs leading-relaxed text-muted-foreground">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  {/* Price & Order CTA */}
+                  <div className="mt-5 flex items-center justify-between border-t border-border/60 pt-3.5">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] tracking-wider text-muted-foreground uppercase">
+                        Harga
+                      </span>
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="text-base font-extrabold text-foreground">
+                          {priceInfo.finalPriceFormatted}
+                        </span>
+                        {priceInfo.hasPromo && (
+                          <span className="text-xs font-medium text-muted-foreground line-through">
+                            {priceInfo.originalPriceFormatted}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <a
+                      href={menuOrderWhatsappLink(
+                        item.name,
+                        priceInfo.finalPriceFormatted,
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-2 text-xs font-bold text-primary-foreground shadow-xs transition-transform hover:scale-105 hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                      aria-label={`Pesan ${item.name} seharga ${priceInfo.finalPriceFormatted} via WhatsApp`}
+                    >
+                      <FaWhatsapp className="size-3.5" />
+                      <span>Pesan via WA</span>
+                    </a>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </Container>

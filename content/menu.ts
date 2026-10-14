@@ -9,7 +9,7 @@ export type MenuItem = {
     | "Minuman & Kopi";
   description: string;
   price: number;
-  priceFormatted: string;
+  promoPercent?: number;
   image: string;
   rating: number;
   badge?: string;
@@ -17,11 +17,40 @@ export type MenuItem = {
   isTopPick?: boolean;
 };
 
+export function formatRupiah(amount: number): string {
+  return `Rp ${amount.toLocaleString("id-ID")}`;
+}
+
+export function getProductPrice(price: number, promoPercent?: number) {
+  const hasPromo = typeof promoPercent === "number" && promoPercent > 0;
+  if (!hasPromo) {
+    return {
+      hasPromo: false,
+      finalPrice: price,
+      finalPriceFormatted: formatRupiah(price),
+      originalPriceFormatted: null,
+      promoBadge: null,
+    };
+  }
+
+  const promoPrice =
+    Math.round((price * (1 - promoPercent / 100)) / 1000) * 1000;
+
+  return {
+    hasPromo: true,
+    finalPrice: promoPrice,
+    finalPriceFormatted: formatRupiah(promoPrice),
+    originalPriceFormatted: formatRupiah(price),
+    promoBadge: `Promo ${promoPercent}%`,
+  };
+}
+
 export type CategoryCard = {
   name: string;
   categoryKey: string;
   itemCount: string;
   image: string;
+  badge?: string;
 };
 
 export const menuCategories = [
@@ -74,7 +103,7 @@ export const menuItems: MenuItem[] = [
     description:
       "Daging sapi Australia 120g empuk juicy, lelehan keju cheddar, bawang karamel manis, selada segar, dan saus racikan khas Delish.",
     price: 48000,
-    priceFormatted: "Rp 48.000",
+    promoPercent: 30,
     image: "/images/hero-burger.jpg",
     rating: 4.9,
     badge: "Best Seller",
@@ -88,7 +117,7 @@ export const menuItems: MenuItem[] = [
     description:
       "Adonan fermentasi alami 48 jam dengan saus tomat San Marzano otentik, mozzarella fior di latte meleleh, dan daun basil wangi.",
     price: 68000,
-    priceFormatted: "Rp 68.000",
+    promoPercent: 0,
     image: "/images/pizza-margherita.jpg",
     rating: 4.8,
     badge: "Favorit Chef",
@@ -101,7 +130,7 @@ export const menuItems: MenuItem[] = [
     description:
       "Dada ayam panggang herb-marinated dengan lapisan keju mozarella leleh, tomat segar, selada renyah di atas brioche bun lembut.",
     price: 42000,
-    priceFormatted: "Rp 42.000",
+    promoPercent: 30,
     image: "/images/sandwich-wrap.jpg",
     rating: 4.8,
     isTopPick: true,
@@ -113,7 +142,7 @@ export const menuItems: MenuItem[] = [
     description:
       "Kombinasi selada hidroponik, tomat ceri manis, potongan alpukat mentega, dan saus honey lemon mustard yang menyegarkan.",
     price: 38000,
-    priceFormatted: "Rp 38.000",
+    promoPercent: 0,
     image: "/images/fresh-salad.jpg",
     rating: 4.8,
     badge: "Healthy Choice",
@@ -126,7 +155,7 @@ export const menuItems: MenuItem[] = [
     description:
       "Fillet paha ayam garing keemasan dengan siraman sambal matah Bali segar, disajikan bersama nasi pulen wangi dan telur setengah matang.",
     price: 45000,
-    priceFormatted: "Rp 45.000",
+    promoPercent: 0,
     image: "/images/crispy-chicken.jpg",
     rating: 4.9,
     badge: "Favorit",
@@ -139,7 +168,7 @@ export const menuItems: MenuItem[] = [
     description:
       "Irisan daging US beef lembut dimasak lambat dengan bawang bombay dan saus manis gurih khas, onsen egg, dan taburan nori.",
     price: 52000,
-    priceFormatted: "Rp 52.000",
+    promoPercent: 0,
     image: "/images/rice-bowl.jpg",
     rating: 4.9,
     badge: "Best Seller",
@@ -152,7 +181,7 @@ export const menuItems: MenuItem[] = [
     description:
       "Kentang goreng garing potongan tebal berbalut minyak white truffle wangi, taburan parmesan gurih, dan saus cocolan garlic mayo.",
     price: 32000,
-    priceFormatted: "Rp 32.000",
+    promoPercent: 0,
     image: "/images/truffle-fries.jpg",
     rating: 4.8,
   },
@@ -163,7 +192,7 @@ export const menuItems: MenuItem[] = [
     description:
       "Espresso blend biji Arabika pilihan dipadukan susu segar creamy dan gula aren murni organik lokal. Manis pas dan aromatik.",
     price: 24000,
-    priceFormatted: "Rp 24.000",
+    promoPercent: 0,
     image: "/images/iced-coffee.jpg",
     rating: 4.9,
     badge: "Favorit Minuman",
@@ -176,7 +205,7 @@ export const menuItems: MenuItem[] = [
     description:
       "Sodaan menyegarkan dengan puree beri hitam liar, irisan jeruk lemon, daun mint aromatik, dan es batu kristal.",
     price: 28000,
-    priceFormatted: "Rp 28.000",
+    promoPercent: 0,
     image: "/images/fruit-mocktail.jpg",
     rating: 4.8,
   },

@@ -37,7 +37,7 @@ export function Field({
     : children;
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn("space-y-2.5", className)}>
       <Label htmlFor={id}>{label}</Label>
       {control}
       {hint ? (

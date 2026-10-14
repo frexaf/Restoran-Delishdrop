@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LuArrowRight } from "react-icons/lu";
+import { cn } from "@/lib/utils";
 import { popularCategories } from "@/content/menu";
 import { Container } from "@/components/ui/container";
 
@@ -28,20 +29,24 @@ export function PopularCategories() {
         </div>
 
         {/* Categories Grid (5 columns on desktop) */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-5 lg:gap-6">
-          {popularCategories.map((cat) => (
+        <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5 lg:gap-5 xl:gap-6">
+          {popularCategories.map((cat, idx) => (
             <Link
               key={cat.name}
               href={`/menu?kategori=${encodeURIComponent(cat.categoryKey)}`}
-              className="group flex flex-col items-center rounded-2xl border border-border/80 bg-surface-card p-4 text-center shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md"
+              className={cn(
+                "group relative flex flex-col items-center rounded-2xl border border-border/80 bg-surface-card p-3.5 text-center shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md sm:p-4 lg:p-3.5 xl:p-4",
+                idx === 4 &&
+                  "col-span-2 sm:col-span-1 max-w-[200px] sm:max-w-none mx-auto w-full",
+              )}
             >
               {/* Category Image */}
-              <div className="relative mb-3.5 size-24 overflow-hidden rounded-full border-2 border-border/60 bg-muted sm:size-28">
+              <div className="relative mb-3.5 size-28 overflow-hidden rounded-full border-2 border-border/60 bg-muted shadow-xs transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-md sm:size-32 md:size-36 lg:size-36 xl:size-40">
                 <Image
                   src={cat.image}
                   alt={`Kategori ${cat.name}`}
                   fill
-                  sizes="(max-width: 640px) 96px, 112px"
+                  sizes="(max-width: 640px) 112px, (max-width: 1024px) 144px, 160px"
                   className="object-cover transition-transform duration-300 group-hover:scale-110"
                 />
               </div>
