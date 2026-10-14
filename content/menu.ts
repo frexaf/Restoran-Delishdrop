@@ -2,11 +2,11 @@ export type MenuItem = {
   id: string;
   name: string;
   category:
-    | "Burger & Wrap"
-    | "Artisan Pizza"
-    | "Rice Bowl & Crispy"
-    | "Salad & Sides"
-    | "Minuman & Kopi";
+  | "Burger & Wrap"
+  | "Artisan Pizza"
+  | "Rice Bowl & Crispy"
+  | "Salad & Sides"
+  | "Minuman & Kopi";
   description: string;
   price: number;
   promoPercent?: number;
@@ -67,7 +67,7 @@ export const popularCategories: CategoryCard[] = [
     name: "Burgers & Toast",
     categoryKey: "Burger & Wrap",
     itemCount: "6+ Menu",
-    image: "/images/hero-burger.jpg",
+    image: "/images/beef-burger.jpg",
   },
   {
     name: "Artisan Pizza",
@@ -104,7 +104,7 @@ export const menuItems: MenuItem[] = [
       "Daging sapi Australia 120g empuk juicy, lelehan keju cheddar, bawang karamel manis, selada segar, dan saus racikan khas Delish.",
     price: 48000,
     promoPercent: 30,
-    image: "/images/hero-burger.jpg",
+    image: "/images/beef-burger.jpg",
     rating: 4.9,
     badge: "Best Seller",
     isBestSeller: true,
